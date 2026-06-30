@@ -67,6 +67,11 @@ ATS Score + Feedback + Suggestions
 - LinkedIn Profile Analysis
 - Multi-language Resume Support
 
+  ## 📸 Workflow Screenshot
+
+![Workflow](./AI%20Resume%20Analyzer.png)
+
+ 
 ## 👨‍💻 Author
 
 **Ansh Thakare**
