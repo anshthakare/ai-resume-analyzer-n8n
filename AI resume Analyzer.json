@@ -1,0 +1,159 @@
+{
+  "name": "AI resume Analyzer",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert ATS Resume Analyzer.\n\nAnalyze the following resume and give:\n1. ATS Score out of 100\n2. Strengths\n3. Weaknesses\n4. Missing Skills\n5. Suggestions to improve\n6. Final Verdict\n\nResume:\n{{ $json.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        368,
+        0
+      ],
+      "id": "9475ad78-c718-40eb-8d73-121ed05726ef",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        192
+      ],
+      "id": "55ecede0-0140-4bdd-8189-538deeba8bc9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "jCNUDIZH0bGOiMAJ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "resume-analysis",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        464,
+        224
+      ],
+      "id": "2301483e-36b4-4256-8b6c-c30a653a83db",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "Resume_PDF",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7d44fe0b-7af4-4519-9f81-2dedfa2dedee",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "formTitle": "AI Resume Analyzer",
+        "formDescription": "Upload your resume in PDF format and get an AI-powered analysis",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Resume PDF",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        16,
+        0
+      ],
+      "id": "8fcce06c-d30b-4494-9c70-c803372c7050",
+      "name": "On form submission",
+      "webhookId": "f9b98f84-fde5-4133-9ac1-ae13d75ef242"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8153d6bf-66be-4202-a421-bc013e493ae5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "48e5f800a71d6483ec81ff0fc00b49319ad6e4006f18bb60cb8043a360b5cb99"
+  },
+  "nodeGroups": [],
+  "id": "eacutAazkQqQPuDc",
+  "tags": []
+}
